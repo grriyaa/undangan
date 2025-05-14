@@ -1,0 +1,195 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Undangan Metutug kelih Bali - Tugus Rama & Tugik Wira</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="welcome-animation">
+    <div class="swastyastu-animation">
+      <img src="assets/images/o-swastyastu-1-300x98-1.png" alt="Om Swastyastu">
+    </div>
+  </div>
+
+  <audio id="bgMusic" preload="auto" loop>
+    <source src="assets/SpotiDownloader.com - Awan Putih - Gus Teja.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="cookie-agreement">
+    <p>Dengan mengklik "Setuju", Anda menyetujui untuk memutar musik latar belakang.</p>
+    <button id="playMusic" class="music-button" type="button">Setuju</button>
+  </div>
+
+  <div class="top-decoration">
+    <img src="assets/images/mandala2.png" class="top-mandala" alt="Mandala">
+    <img src="assets/images/o-swastyastu-1-300x98-1.png" class="swastyastu" alt="Om Swastyastu">
+  </div>
+  
+  <div class="container">
+    <div class="info">
+      <h1>Tugus Rama & Tugik Wira</h1>
+      <h2>Undangan Metutug kelh</h2>
+    </div>
+    
+    <div class="ucapan">
+      <p>Dengan penuh sukacita kami mengundang Anda untuk menghadiri upacara Metutug kelih kami.</p>
+    </div>
+    
+    <div class="terima-kasih">
+      <p>Terima Kasih</p>
+    </div>
+
+    <div class="comment-section">
+      <h3>Kirimkan Ucapan & Konfirmasi Kehadiran</h3>
+      <form id="commentForm">
+        <input type="text" id="nama" placeholder="Nama" required style="width:45%;margin:5px;">
+        <select id="kehadiran" required style="width:45%;margin:5px;">
+          <option value="Hadir">Hadir</option>
+          <option value="Akan Hadir">Akan Hadir</option>
+          <option value="Tidak Hadir">Tidak Hadir</option>
+        </select><br>
+        <textarea id="pesan" placeholder="Ucapan/Pesan" rows="2" style="width:92%;margin:5px;" required></textarea><br>
+        <button type="submit" style="margin:10px 0;">Kirim Ucapan</button>
+      </form>
+      <div id="commentsList">
+        <!-- Komentar akan muncul di sini -->
+      </div>
+    </div>
+  </div>
+
+  <div class="countdown-container">
+    <div class="countdown">
+      <b>Hitung Mundur Acara:</b><br>
+      <span id="countdown-timer">Loading...</span>
+    </div>
+  </div>
+
+  <div class="maps-container">
+    <div class="maps-section">
+      <h3>Lokasi Acara</h3>
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3944.123456789012!2d115.1756583!3d-8.583069!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOMKwMzUnMDAuMCJTIDExNcKwMTAnMzYuNCJF!5e0!3m2!1sid!2sid!4v1234567890!5m2!1sid!2sid" 
+        width="100%" 
+        height="250" 
+        style="border:3px solid #e6c87a; border-radius:10px;" 
+        allowfullscreen="" 
+        loading="lazy">
+      </iframe>
+    </div>
+  </div>
+
+  <script>
+  // Musik control
+  document.addEventListener('DOMContentLoaded', function() {
+    const bgMusic = document.getElementById('bgMusic');
+    const playButton = document.getElementById('playMusic');
+    
+    // Set volume
+    bgMusic.volume = 0.5;
+    
+    // Fungsi untuk memutar musik
+    function playMusic() {
+      // Pastikan audio dimuat
+      bgMusic.load();
+      
+      // Tunggu audio siap
+      bgMusic.addEventListener('canplaythrough', function onCanPlay() {
+        // Hapus event listener setelah audio siap
+        bgMusic.removeEventListener('canplaythrough', onCanPlay);
+        
+        // Coba putar musik
+        const playPromise = bgMusic.play();
+        
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            playButton.textContent = 'Berhenti';
+            playButton.classList.add('playing');
+          }).catch(error => {
+            console.error('Error playing music:', error);
+            // Coba putar lagi setelah interaksi pengguna
+            document.body.addEventListener('click', function playAfterInteraction() {
+              bgMusic.play().then(() => {
+                playButton.textContent = 'Berhenti';
+                playButton.classList.add('playing');
+              }).catch(error => {
+                console.error('Still cannot play music:', error);
+              });
+              document.body.removeEventListener('click', playAfterInteraction);
+            }, { once: true });
+          });
+        }
+      }, { once: true });
+    }
+    
+    // Fungsi untuk menghentikan musik
+    function pauseMusic() {
+      bgMusic.pause();
+      playButton.textContent = 'Setuju';
+      playButton.classList.remove('playing');
+    }
+    
+    // Event listener untuk tombol
+    playButton.addEventListener('click', function() {
+      if (bgMusic.paused) {
+        playMusic();
+      } else {
+        pauseMusic();
+      }
+    });
+  });
+
+  // Animasi Om Swastyastu
+  document.addEventListener('DOMContentLoaded', function() {
+    const welcomeAnimation = document.querySelector('.welcome-animation');
+    welcomeAnimation.style.display = 'flex';
+    
+    setTimeout(() => {
+      welcomeAnimation.style.opacity = '0';
+      setTimeout(() => {
+        welcomeAnimation.style.display = 'none';
+      }, 1000);
+    }, 2000);
+  });
+
+  // Countdown Timer
+  const targetDate = new Date('2025-05-16T15:00:00+08:00');
+  function updateCountdown() {
+    const now = new Date();
+    let diff = targetDate - now;
+    if (diff < 0) diff = 0;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / 1000 / 60) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+    document.getElementById('countdown-timer').innerHTML =
+      `${days} Hari ${hours} Jam ${minutes} Menit ${seconds} Detik`;
+  }
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  // Komentar/ucapan (localStorage)
+  function loadComments() {
+    const comments = JSON.parse(localStorage.getItem('metatah_comments') || '[]');
+    const list = document.getElementById('commentsList');
+    list.innerHTML = comments.map(c =>
+      `<div class="comment-item"><b>${c.nama}</b> <span class="badge">${c.kehadiran}</span><br><span>${c.pesan}</span></div>`
+    ).join('');
+  }
+  
+  document.getElementById('commentForm').onsubmit = function(e) {
+    e.preventDefault();
+    const nama = document.getElementById('nama').value.trim();
+    const kehadiran = document.getElementById('kehadiran').value;
+    const pesan = document.getElementById('pesan').value.trim();
+    if (!nama || !pesan) return;
+    const comments = JSON.parse(localStorage.getItem('metatah_comments') || '[]');
+    comments.unshift({ nama, kehadiran, pesan });
+    localStorage.setItem('metatah_comments', JSON.stringify(comments));
+    loadComments();
+    document.getElementById('commentForm').reset();
+  };
+  
+  loadComments();
+  </script>
+</body>
